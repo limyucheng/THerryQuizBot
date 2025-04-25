@@ -1,9 +1,14 @@
 import asyncio
 import random
 import json
+from dotenv import load_dotenv
+import os
 
 from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters
+
+load_dotenv()
+BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 games = {}
 
@@ -231,7 +236,7 @@ def create_blanks(answer, reveal_ratio=0.0):
     return '   '.join(displayed_words)
 
 if __name__ == '__main__':
-    app = ApplicationBuilder().token("7717669085:AAFWek6jITSn25ccgKc87OSj99AVH7iCaAs").build()
+    app = ApplicationBuilder().token("BOT_TOKEN").build()
 
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("stop", stop))
