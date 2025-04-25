@@ -122,7 +122,7 @@ async def ask_question(update: Update, context: ContextTypes.DEFAULT_TYPE):
     game["question_active"] = True
 
     await asyncio.sleep(2)
-    await context.bot.send_message(chat_id, f"❓ *Question {game['questions_asked']}:* {question['question']}", parse_mode="Markdown")
+    await context.bot.send_message(chat_id, f"❓ Question *{game['questions_asked']}/{game["num_questions"]}*\n\n {question['question']}", parse_mode="Markdown")
     game["task"] = asyncio.create_task(run_stages(update, context))
 
 async def run_stages(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -152,7 +152,7 @@ async def run_stages(update: Update, context: ContextTypes.DEFAULT_TYPE):
             hint = generate_hint(answer, mode)
             await context.bot.send_message(
                 chat_id,
-                f"❓ Question {game['questions_asked']}/{game["num_questions"]}\n\n{question_text}\n\n"
+                f"❓ Question *{game['questions_asked']}/{game["num_questions"]}*\n\n{question_text}\n\n"
                 f"💬 Hint: `{hint}`",
                 parse_mode="Markdown"
             )
@@ -162,7 +162,7 @@ async def run_stages(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not game.get("question_active", False):
         return
 
-    await context.bot.send_message(chat_id, f"⏳ Time's up! The correct answer was: *{answer}*", parse_mode="Markdown")
+    await context.bot.send_message(chat_id, f"⏳ *Time's up!*\n\nThe correct answer was: *{answer}*", parse_mode="Markdown")
     game["question_active"] = False
     game["current_answer"] = None
     await asyncio.sleep(3)
@@ -183,15 +183,12 @@ async def end_game(update: Update, context: ContextTypes.DEFAULT_TYPE, manual_st
         leaderboard = sorted(scoreboard.items(), key=lambda x: x[1], reverse=True)
         medals = ["🥇", "🥈", "🥉"]
 
-        message = "🏆 Final Leaderboard 🏆\n\n"
+        message = "🏁 Game Over!\n\n🏆 Final Leaderboard 🏆\n\n"
         for idx, (name, score) in enumerate(leaderboard, start=1):
             medal = medals[idx-1] if idx <= 3 else f"{idx}."
             message += f"{medal} {name}: {score}\n"
 
         await context.bot.send_message(chat_id, message)
-
-    if manual_stop:
-        await context.bot.send_message(chat_id, "🛑 Game was stopped manually.")
 
     del games[chat_id]
 
