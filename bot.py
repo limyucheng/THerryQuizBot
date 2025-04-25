@@ -12,7 +12,6 @@ BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 games = {}
 
-# Load question bank from JSON
 with open("questions.json", "r") as f:
     question_bank = json.load(f)
 
@@ -76,7 +75,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not game["question_active"]:
         return
 
-    if game["current_answer"] and text.lower().strip() == game["current_answer"].lower().strip():
+    if game["current_answer"] and game["current_answer"].lower().strip() in text.lower().strip():
         user_name = update.effective_user.first_name
         points = [5, 3, 2, 1][game["stage"]]
         correct_answer = game["current_answer"]
@@ -90,9 +89,8 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         await context.bot.send_message(
             chat_id,
-            f"🎉 *{user_name}* answered correctly!\n\n"
-            f"✅ The answer was: *{correct_answer}*\n\n"
-            f"🏆 Points earned: +*{points}*",
+            f"✅ That's right! *{correct_answer}*!\n\n"
+            f"🎖️ *{user_name}* +*{points}*\n\n",
             parse_mode="Markdown"
         )
 
@@ -114,7 +112,6 @@ async def ask_question(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await context.bot.send_message(chat_id, f"👉 Moving on to Question {game['questions_asked'] + 1}/{game['num_questions']}...")
 
-    # Pick a random question
     question = random.choice(game["remaining_questions"])
     game["remaining_questions"].remove(question)
 
@@ -141,7 +138,7 @@ async def run_stages(update: Update, context: ContextTypes.DEFAULT_TYPE):
         ("40%", 1)
     ]
 
-    for idx, (mode, points) in enumerate(stages):
+    for idx, mode in enumerate(stages):
         await asyncio.sleep(12)
 
         if not game.get("question_active", False):
@@ -155,12 +152,11 @@ async def run_stages(update: Update, context: ContextTypes.DEFAULT_TYPE):
             hint = generate_hint(answer, mode)
             await context.bot.send_message(
                 chat_id,
-                f"❓ *Question {game['questions_asked']}:* {question_text}\n\n"
+                f"❓ Question {game['questions_asked']}/{game["num_questions"]}\n\n{question_text}\n\n"
                 f"💬 Hint: `{hint}`",
                 parse_mode="Markdown"
             )
 
-    # Final reveal
     await asyncio.sleep(12)
 
     if not game.get("question_active", False):
@@ -190,7 +186,7 @@ async def end_game(update: Update, context: ContextTypes.DEFAULT_TYPE, manual_st
         message = "🏆 Final Leaderboard 🏆\n\n"
         for idx, (name, score) in enumerate(leaderboard, start=1):
             medal = medals[idx-1] if idx <= 3 else f"{idx}."
-            message += f"{medal} {name}: {score} points\n"
+            message += f"{medal} {name}: {score}\n"
 
         await context.bot.send_message(chat_id, message)
 
