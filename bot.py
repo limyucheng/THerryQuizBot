@@ -138,7 +138,7 @@ async def run_stages(update: Update, context: ContextTypes.DEFAULT_TYPE):
         ("40%", 1)
     ]
 
-    for idx, mode in enumerate(stages):
+    for idx, (mode, points) in enumerate(stages):
         await asyncio.sleep(12)
 
         if not game.get("question_active", False):
