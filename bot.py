@@ -153,8 +153,7 @@ async def run_stages(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await context.bot.send_message(
                 chat_id,
                 f"❓ *Question* {game['questions_asked']}/{game['num_questions']}\n\n{question_text}\n\n"
-                f"💬 Hint: {hint}",
-                parse_mode="Markdown"
+                f"💬 Hint: {hint}"
             )
 
         await asyncio.sleep(12)
