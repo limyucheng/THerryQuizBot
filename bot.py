@@ -222,7 +222,7 @@ def create_blanks(answer, reveal_ratio=0.0):
             elif idx in reveal_indices:
                 word_hint.append(c)
             else:
-                word_hint.append("ˍ")
+                word_hint.append("_")
 
         displayed_words.append(' '.join(word_hint))
 
