@@ -90,7 +90,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await context.bot.send_message(
             chat_id,
             f"✅ That's right, *{correct_answer}*!\n\n"
-            f"🎖️ *{user_name}* +*{points}*\n\n",
+            f"🎖️ {user_name} +{points}\n\n",
             parse_mode="Markdown"
         )
 
@@ -182,12 +182,12 @@ async def end_game(update: Update, context: ContextTypes.DEFAULT_TYPE, manual_st
         leaderboard = sorted(scoreboard.items(), key=lambda x: x[1], reverse=True)
         medals = ["🥇", "🥈", "🥉"]
 
-        message = "🏁 Game Over!\n\n🏆 *Leaderboard* 🏆\n"
+        message = f"🏁 Game Over!\n\n🏆 *Leaderboard* 🏆\n",
         for idx, (name, score) in enumerate(leaderboard, start=1):
             medal = medals[idx-1] if idx <= 3 else f"{idx}."
-            message += f"{medal} *{name}*   {score} points\n"
+            message += f"  {medal} *{name}*   {score} points\n",
 
-        await context.bot.send_message(chat_id, message)
+        await context.bot.send_message(chat_id, message, parse_mode="Markdown")
 
     del games[chat_id]
 
