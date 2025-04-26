@@ -178,15 +178,15 @@ async def end_game(update: Update, context: ContextTypes.DEFAULT_TYPE, manual_st
     scoreboard = {name: score for name, score in game["scoreboard"].items() if score > 0}
 
     if not scoreboard:
-        await context.bot.send_message(chat_id, "😶 *Oops!*\n\nNo one scored any points this game. Better luck next time!")
+        await context.bot.send_message(chat_id, "😶 *Oops!*\n\nNo one scored any points this game. Better luck next time!", parse_mode="Markdown")
     else:
         leaderboard = sorted(scoreboard.items(), key=lambda x: x[1], reverse=True)
         medals = ["🥇", "🥈", "🥉"]
 
-        message = "🏁 Game Over!\n\n🏆 **Leaderboard** 🏆\n",
+        message = "🏁 Game Over!\n\n🏆 *Leaderboard* 🏆\n"
         for idx, (name, score) in enumerate(leaderboard, start=1):
             medal = medals[idx-1] if idx <= 3 else f"{idx}."
-            message += f"  {medal} *{name}*   {score} points\n",
+            message += f"  {medal} *{name}*   {score} points\n"
 
         await context.bot.send_message(chat_id, message, parse_mode="Markdown")
 
