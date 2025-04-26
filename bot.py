@@ -95,7 +95,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             parse_mode="Markdown"
         )
 
-        await asyncio.sleep(3)
+        await asyncio.sleep(2)
         await ask_question(update, context)
 
 async def ask_question(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -123,7 +123,7 @@ async def ask_question(update: Update, context: ContextTypes.DEFAULT_TYPE):
     game["question_active"] = True
 
     await asyncio.sleep(2)
-    await context.bot.send_message(chat_id, f"❓ *Question* {game['questions_asked']}/{game["num_questions"]}\n\n{question['question']}", parse_mode="Markdown")
+    await context.bot.send_message(chat_id, f"❓ *Question* {game['questions_asked']}/{game['num_questions']}\n\n{question['question']}", parse_mode="Markdown")
     game["task"] = asyncio.create_task(run_stages(update, context))
 
 async def run_stages(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -140,7 +140,6 @@ async def run_stages(update: Update, context: ContextTypes.DEFAULT_TYPE):
     ]
 
     for idx, (mode, points) in enumerate(stages):
-        await asyncio.sleep(12)
 
         if not game.get("question_active", False):
             return
@@ -153,8 +152,8 @@ async def run_stages(update: Update, context: ContextTypes.DEFAULT_TYPE):
             hint = generate_hint(answer, mode)
             await context.bot.send_message(
                 chat_id,
-                f"❓ *Question* {game['questions_asked']}/{game["num_questions"]}\n\n{question_text}\n\n"
-                f"💬 Hint: {hint}",
+                f"❓ *Question* {game['questions_asked']}/{game['num_questions']}\n\n{question_text}\n\n"
+                f"💬 Hint: ```{hint}```",
                 parse_mode="Markdown"
             )
 
@@ -166,7 +165,7 @@ async def run_stages(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(chat_id, f"⏳ *Time's up!*\n\nThe correct answer was: *{answer}*", parse_mode="Markdown")
     game["question_active"] = False
     game["current_answer"] = None
-    await asyncio.sleep(3)
+    await asyncio.sleep(2)
     await ask_question(update, context)
 
 async def end_game(update: Update, context: ContextTypes.DEFAULT_TYPE, manual_stop=False):
