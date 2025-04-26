@@ -141,6 +141,8 @@ async def run_stages(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     for idx, (mode, points) in enumerate(stages):
 
+        await asyncio.sleep(12)
+
         if not game.get("question_active", False):
             return
 
@@ -153,7 +155,7 @@ async def run_stages(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await context.bot.send_message(
                 chat_id,
                 f"❓ *Question* {game['questions_asked']}/{game['num_questions']}\n\n{question_text}\n\n"
-                f"💬 Hint: ```{hint}```",
+                f"💬 Hint: {hint}",
                 parse_mode="Markdown"
             )
 
