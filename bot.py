@@ -89,7 +89,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         await context.bot.send_message(
             chat_id,
-            f"✅ That's right! *{correct_answer}*!\n\n"
+            f"✅ That's right, *{correct_answer}*!\n\n"
             f"🎖️ *{user_name}* +*{points}*\n\n",
             parse_mode="Markdown"
         )
@@ -122,7 +122,7 @@ async def ask_question(update: Update, context: ContextTypes.DEFAULT_TYPE):
     game["question_active"] = True
 
     await asyncio.sleep(2)
-    await context.bot.send_message(chat_id, f"❓ Question *{game['questions_asked']}/{game["num_questions"]}*\n\n {question['question']}", parse_mode="Markdown")
+    await context.bot.send_message(chat_id, f"❓ *Question* {game['questions_asked']}/{game["num_questions"]}\n\n {question['question']}", parse_mode="Markdown")
     game["task"] = asyncio.create_task(run_stages(update, context))
 
 async def run_stages(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -152,9 +152,8 @@ async def run_stages(update: Update, context: ContextTypes.DEFAULT_TYPE):
             hint = generate_hint(answer, mode)
             await context.bot.send_message(
                 chat_id,
-                f"❓ Question *{game['questions_asked']}/{game["num_questions"]}*\n\n{question_text}\n\n"
-                f"💬 Hint: `{hint}`",
-                parse_mode="Markdown"
+                f"❓ *Question* {game['questions_asked']}/{game["num_questions"]}\n\n{question_text}\n\n"
+                f"💬 Hint: {hint}"
             )
 
     await asyncio.sleep(12)
@@ -183,10 +182,10 @@ async def end_game(update: Update, context: ContextTypes.DEFAULT_TYPE, manual_st
         leaderboard = sorted(scoreboard.items(), key=lambda x: x[1], reverse=True)
         medals = ["🥇", "🥈", "🥉"]
 
-        message = "🏁 Game Over!\n\n🏆 Final Leaderboard 🏆\n\n"
+        message = "🏁 Game Over!\n\n🏆 *Leaderboard* 🏆\n"
         for idx, (name, score) in enumerate(leaderboard, start=1):
             medal = medals[idx-1] if idx <= 3 else f"{idx}."
-            message += f"{medal} {name}: {score}\n"
+            message += f"{medal} *{name}*   {score} points\n"
 
         await context.bot.send_message(chat_id, message)
 
