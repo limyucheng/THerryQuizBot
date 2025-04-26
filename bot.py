@@ -90,7 +90,8 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await context.bot.send_message(
             chat_id,
             f"✅ That's right, *{correct_answer}*!\n\n"
-            f"🎖️ {user_name} +{points}\n\n",
+            f"🎖️ {user_name} +{points}\n\n"
+            f"👍 Rate this question: /good if you liked it or /bad if it could be better!",
             parse_mode="Markdown"
         )
 
@@ -122,7 +123,7 @@ async def ask_question(update: Update, context: ContextTypes.DEFAULT_TYPE):
     game["question_active"] = True
 
     await asyncio.sleep(2)
-    await context.bot.send_message(chat_id, f"❓ *Question* {game['questions_asked']}/{game["num_questions"]}\n\n {question['question']}", parse_mode="Markdown")
+    await context.bot.send_message(chat_id, f"❓ *Question* {game['questions_asked']}/{game["num_questions"]}\n\n{question['question']}", parse_mode="Markdown")
     game["task"] = asyncio.create_task(run_stages(update, context))
 
 async def run_stages(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -182,7 +183,7 @@ async def end_game(update: Update, context: ContextTypes.DEFAULT_TYPE, manual_st
         leaderboard = sorted(scoreboard.items(), key=lambda x: x[1], reverse=True)
         medals = ["🥇", "🥈", "🥉"]
 
-        message = f"🏁 Game Over!\n\n🏆 *Leaderboard* 🏆\n",
+        message = "🏁 Game Over!\n\n🏆 **Leaderboard** 🏆\n",
         for idx, (name, score) in enumerate(leaderboard, start=1):
             medal = medals[idx-1] if idx <= 3 else f"{idx}."
             message += f"  {medal} *{name}*   {score} points\n",
@@ -221,7 +222,7 @@ def create_blanks(answer, reveal_ratio=0.0):
             elif idx in reveal_indices:
                 word_hint.append(c)
             else:
-                word_hint.append("_")
+                word_hint.append("ˍ")
 
         displayed_words.append(' '.join(word_hint))
 
