@@ -157,8 +157,6 @@ async def run_stages(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 f"💬 Hint: {hint}"
             )
 
-    await asyncio.sleep(12)
-
     if not game.get("question_active", False):
         return
 
