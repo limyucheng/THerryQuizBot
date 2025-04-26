@@ -141,25 +141,23 @@ async def run_stages(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     for idx, (mode, points) in enumerate(stages):
 
-        await asyncio.sleep(12)
-
         if not game.get("question_active", False):
             return
 
         game["stage"] = idx
 
         if mode == "no_hint":
-            continue
+            pass
         else:
             hint = generate_hint(answer, mode)
             await context.bot.send_message(
                 chat_id,
                 f"❓ *Question* {game['questions_asked']}/{game['num_questions']}\n\n{question_text}\n\n"
-                f"💬 Hint: {hint}",
+                f"💬 Hint: ```{hint}```",
                 parse_mode="Markdown"
             )
 
-    await asyncio.sleep(12)
+        await asyncio.sleep(12)
 
     if not game.get("question_active", False):
         return
